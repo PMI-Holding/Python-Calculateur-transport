@@ -1,0 +1,16 @@
+# Secrets Streamlit — ne jamais publier sur GitHub
+.streamlit/secrets.toml
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Environnements virtuels
+.venv/
+venv/
+env/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
