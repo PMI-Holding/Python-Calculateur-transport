@@ -11,10 +11,9 @@ from datetime import datetime
 
 # ─── Configuration de la page ───────────────────────────────────────────────
 st.set_page_config(
-    page_title="Calculateur de Couverture Transport",
-    page_icon="🚚",
+    page_title="Calculateur Limites Responsabilité Transport (CMR, National, Aérien)",
+    page_icon="🚛",
     layout="centered",
-    initial_sidebar_state="collapsed",
 )
 
 # ─── Constantes ─────────────────────────────────────────────────────────────
@@ -86,6 +85,60 @@ st.markdown(
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ─── SEO : meta description + Open Graph ─────────────────────────────────────
+st.markdown(
+    """
+    <script>
+    (function() {
+        var desc = document.createElement('meta');
+        desc.name = 'description';
+        desc.content = "Calculez gratuitement les limites légales de responsabilité de votre transporteur (CMR, route nationale, aérien, maritime). Détectez votre sous-assurance en 2 minutes.";
+        document.head.appendChild(desc);
+
+        var ogTitle = document.createElement('meta');
+        ogTitle.setAttribute('property', 'og:title');
+        ogTitle.content = 'Calculateur Limites Responsabilité Transport — CMR, National, Aérien';
+        document.head.appendChild(ogTitle);
+
+        var ogDesc = document.createElement('meta');
+        ogDesc.setAttribute('property', 'og:description');
+        ogDesc.content = "Outil gratuit : calculez les plafonds d'indemnisation transporteur selon la convention CMR, le droit français ou la Convention de Montréal. Identifiez votre sous-assurance en 2 minutes.";
+        document.head.appendChild(ogDesc);
+
+        var ogType = document.createElement('meta');
+        ogType.setAttribute('property', 'og:type');
+        ogType.content = 'website';
+        document.head.appendChild(ogType);
+    })();
+    </script>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ─── SEO : données structurées JSON-LD ───────────────────────────────────────
+st.markdown(
+    """
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Calculateur Limites Responsabilité Transport (CMR, National, Aérien)",
+      "description": "Calculez les limites légales d'indemnisation transporteur (CMR, route nationale, aérien, maritime) et détectez votre sous-assurance transport.",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "All",
+      "inLanguage": "fr",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "keywords": "CMR, responsabilité transporteur, sous-assurance transport, limite légale indemnisation, assurance ad valorem, convention CMR, LTR France, Convention de Montréal"
+    }
+    </script>
     """,
     unsafe_allow_html=True,
 )
@@ -188,7 +241,7 @@ for key, val in [("etape", 1), ("data", {}), ("email", "")]:
         st.session_state[key] = val
 
 # ─── En-tête ─────────────────────────────────────────────────────────────────
-st.markdown('<div class="app-title">🚚 Calculateur de Couverture Transport</div>', unsafe_allow_html=True)
+st.markdown('<h1 class="app-title">🚛 Calculateur Limites Responsabilité Transport — CMR, National, Aérien</h1>', unsafe_allow_html=True)
 st.markdown(
     '<div class="app-subtitle">Découvrez en 2 minutes si votre marchandise est bien protégée face aux limites légales.</div>',
     unsafe_allow_html=True,
@@ -432,3 +485,103 @@ elif st.session_state.etape == 3:
             st.session_state.data  = {}
             st.session_state.email = ""
             st.rerun()
+
+# ─── FAQ SEO (visible sur toutes les étapes) ──────────────────────────────────
+st.divider()
+with st.expander("❓ Questions fréquentes sur les limites de responsabilité transport"):
+    st.markdown("""
+**Qu'est-ce que la convention CMR et quelles sont ses limites ?**
+
+La Convention CMR (Convention relative au contrat de transport international de marchandises par Route)
+encadre les transports routiers internationaux en Europe. Elle plafonne la responsabilité du transporteur
+à **8,33 DTS par kilogramme** de marchandise perdue ou endommagée, soit environ **10,30 €/kg** au taux actuel.
+
+---
+
+**Quelles sont les limites légales pour le transport national en France ?**
+
+En France, le transport routier national est régi par les Lois Gayssot et les conditions générales de vente (LTR).
+La limite est de **14 €/kg** pour les envois < 3 tonnes (avec plafond de 1 000 €/colis) et **20 €/kg** au-delà.
+
+---
+
+**Pourquoi mes marchandises sont-elles sous-assurées malgré une assurance transporteur ?**
+
+La responsabilité du transporteur est calculée sur le **poids**, non sur la valeur commerciale.
+Exemple : 500 kg de composants électroniques valant 50 000 € ne sont couverts qu'à hauteur de ~5 150 €
+sous CMR (500 × 10,30 €). La sous-assurance atteint alors 90 %.
+
+---
+
+**Qu'est-ce qu'une assurance ad valorem et pourquoi en souscrire une ?**
+
+Une assurance ad valorem couvre la **valeur réelle facturée** de la marchandise, sans plafond lié au poids.
+Elle est indispensable dès que la valeur dépasse significativement les limites légales du transporteur.
+
+---
+
+**Quelles conventions s'appliquent au transport aérien international ?**
+
+Le transport aérien est régi par la **Convention de Montréal** (ou de Varsovie pour les anciens contrats),
+qui limite la responsabilité du transporteur à **22 DTS par kilogramme**, soit environ 27,50 €/kg.
+
+---
+
+**Comment sont calculées les limites pour le transport maritime ?**
+
+Les **Règles de La Haye-Visby** s'appliquent au transport maritime international. La limite retenue est
+le maximum entre 2 DTS/kg total et 666,67 DTS par colis.
+    """)
+    st.markdown(
+        """
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Qu'est-ce que la convention CMR et quelles sont ses limites ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "La Convention CMR plafonne la responsabilité du transporteur à 8,33 DTS par kilogramme, soit environ 10,30 €/kg."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Quelles sont les limites légales pour le transport national en France ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "En France, la limite est de 14 €/kg pour les envois inférieurs à 3 tonnes (plafond 1 000 €/colis) et 20 €/kg au-delà."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Qu'est-ce qu'une assurance ad valorem ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Une assurance ad valorem couvre la valeur réelle facturée de la marchandise, sans plafond lié au poids."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Quelles conventions s'appliquent au transport aérien international ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "La Convention de Montréal limite la responsabilité à 22 DTS par kilogramme, soit environ 27,50 €/kg."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Comment sont calculées les limites pour le transport maritime ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Les Règles de La Haye-Visby s'appliquent : la limite est le maximum entre 2 DTS/kg et 666,67 DTS par colis."
+              }
+            }
+          ]
+        }
+        </script>
+        """,
+        unsafe_allow_html=True,
+    )
