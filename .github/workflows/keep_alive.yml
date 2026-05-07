@@ -1,0 +1,42 @@
+name: Keep Streamlit app awake
+
+on:
+  schedule:
+    - cron: "0 * * * *"   # toutes les heures, 24h/24 7j/7
+  workflow_dispatch:       # déclenchement manuel possible depuis GitHub
+
+jobs:
+  wake:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Playwright
+        run: pip install playwright && playwright install chromium
+
+      - name: Wake up Streamlit app
+        shell: python
+        run: |
+          import asyncio
+          from playwright.async_api import async_playwright
+
+          APP_URL = "https://calculateur-assurance-transport-gsat.streamlit.app/"
+
+          async def main():
+              async with async_playwright() as p:
+                  browser = await p.chromium.launch()
+                  page = await browser.new_page()
+                  print(f"Connexion à {APP_URL} ...")
+                  await page.goto(APP_URL, timeout=60_000)
+
+                  try:
+                      btn = page.get_by_text("Yes, get this app back up!")
+                      await btn.wait_for(timeout=6_000)
+                      await btn.click()
+                      print("App endormie — bouton de réveil cliqué, attente du démarrage...")
+                      await page.wait_for_timeout(25_000)
+                      print("App réveillée.")
+                  except Exception:
+                      print("App déjà active, rien à faire.")
+
+                  await browser.close()
+
+          asyncio.run(main())
